@@ -1,0 +1,19 @@
+#!/bin/bash
+
+# make downloads dir
+if [ ! -d backgrounds ]; then
+  mkdir backgrounds
+fi
+
+# download a bunch of images
+for i in {1..4}; do
+  node cli.js --download=backgrounds
+done
+
+cd backgrounds
+
+# delete 404ed files
+grep -lr "DOCTYPE html" | xargs rm
+
+# give the files sane filenames
+md5sum -- * | awk '{print $2 " " $1 ".jpg"}'| while read args; do mv -v -- $args; done
